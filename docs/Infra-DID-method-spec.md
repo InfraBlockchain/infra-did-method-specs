@@ -1,10 +1,10 @@
 # Infra DID Method Specification
 
-[InfraBlockchain](https://infrablockchain.com) is a blockchain solution 
+[InfraBlockchain[1]](https://infrablockchain.com) is a blockchain solution 
 without cryptocurrency for the public sectors and enterprises. 
 Infra DID method is designed for the underlying InfraBlockchain network to be use as DID    
 The Infra DID method specification conforms to the requirements specified in
-the [DID specification](https://w3c-ccg.github.io/did-core/), currently published by the
+the [DID specification[2]](https://w3c-ccg.github.io/did-core/), currently published by the
 W3C Credentials Community Group.
 
 ## 1. Infra DID
@@ -44,7 +44,7 @@ blockchain-account = EOSIO-blockchain-account-name
 must have standard Infra DID registry smart contracts deployed at publicly known addresses on the blockchain network.
 Open source Infra DID registry contract codes are available on below repository.
 
-Infra DID registry contracts : [https://github.com/InfraBlockchain/infra-did-registry](<>)
+Infra DID registry contracts [3] : [https://github.com/InfraBlockchain/infra-did-registry](<>)
 
 * Known InfraBlockchain `network-id` list
 
@@ -219,7 +219,7 @@ cleos create account accountsvc23 bcaccount234 PUB_K1_6kyc4xQizQmewF7J1wmmKkNooz
 2. check if id string starts with "PUB_" and extract public key binary data from DID string
 3. retrieve public-key DID attributes from ***pubkeydid*** multi-index table of 
    DID registry smart contract on the selected InfraBlockchain network
-4. if *nonce* values of public-key DID attributes is 65535(max 16bit integer value) 
+4. if *nonce* value of public-key DID attribute is 65535(max 16bit integer value) 
    then the DID is in *revoked* / *detactivated* status.
 5. extract service endpoint list from DID attributes map(*attr* field of *pubkeydid* table) 
 6. retrieve owner key of the DID if present from ***pkdidowner*** multi-index table of DID registry contract,
@@ -235,7 +235,7 @@ cleos create account accountsvc23 bcaccount234 PUB_K1_6kyc4xQizQmewF7J1wmmKkNooz
 5. extract service endpoint list from DID attributes map(*attr* field of *accdidattr* table)
 
 ##### Infra DID resolver (javascript)
-*DIF-javascript-universal-resolver* compatible Infra DID resolver is implemented on [infra-did-resolver](https://github.com/InfraBlockchain/infra-did-resolver.git)  
+*DIF-javascript-universal-resolver* compatible Infra DID resolver is implemented on [infra-did-resolver[4]](https://github.com/InfraBlockchain/infra-did-resolver)  
 
 ```javascript
 import { DIDResolutionResult, Resolver } from 'did-resolver'
@@ -246,4 +246,50 @@ const didResolver = new Resolver({ ...infraDidResolver })
 const pubkeyDID: DIDResolutionResult = await didResolver.resolve("did:infra:sentinel:PUB_K1_7nxEa8qHEiy34dpuYH4yE2zRWaAoeT1gsdTnh8n5ikapZZrzjx")
 const accountDID: DIDResolutionResult = await didResolver.resolve("did:infra:sentinel:bcaccountaaa")
 ```
+
+#### 2.2.3 Update
+
+The DID Document may be updated by invoking the relevant smart contract actions of DID Registry contract.
+
+
+##### `Pub-Key DID`
+
+* update Pub-Key DID attributes (currently service endpoint update is supported) 
+  - contract action : **pksetattr**(public_key& pk, string& key, string& value, signature& sig, name& ram_payer)
+
+* set or update Pub-Key DID owner key
+  - contract action : **pkchowner**(public_key& pk, public_key& new_owner_pk, signature& sig, name& ram_payer)
+
+##### `Account DID`
+
+* update Account DID attributes (currently service endpoint update is supported)
+  - contract action : **accsetattr**(name& account, string& key, string& value)
+    
+
+#### 2.2.4 Delete (Revoke)
+
+##### `Pub-Key DID`
+
+* revoke Pub-Key DID
+  - contract action : **pkdidrevoke**(public_key& pk, signature& sig, name& ram_payer)
+  - *nonce* value of public-key DID attribute is set as 65535(max 16bit integer value)
+
+
+## Reference Implementations
+
+The code at [infra-did-resolver[4]](<https://github.com/InfraBlockchain/infra-did-resolver>) and
+[infra-did-js[5]](<https://github.com/InfraBlockchain/infra-did-js>) 
+is intended to present a reference implementation of this DID method.
+
+## References
+
+**[1]** <https://infrablockchain.com>
+
+**[2]** <https://w3c-ccg.github.io/did-core/>
+
+**[3]** <https://github.com/InfraBlockchain/infra-did-registry>
+
+**[4]** <https://github.com/InfraBlockchain/infra-did-resolver>
+
+**[5]** <https://github.com/InfraBlockchain/infra-did-js>
 
