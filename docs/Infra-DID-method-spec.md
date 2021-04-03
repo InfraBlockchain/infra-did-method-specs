@@ -275,6 +275,40 @@ The DID Document may be updated by invoking the relevant smart contract actions 
   - *nonce* value of public-key DID attribute is set as 65535(max 16bit integer value)
 
 
+## 3. Security Considerations
+
+_This section is non-normative._
+
+### Replay Attack
+
+Every Infra DID blockchain transaction on _Infra DID Registry contract_ to update a DID document is required to create a `signature` 
+for user action data concatenated with `blockchain id` and monotonically increasing `nonce` value. 
+A DID-document-modifying transaction executed on a DID registry contract of a specific blockchain network  
+cannot be replayed on any known Infra DID Registry of Infra DID compatible blockchain networks by malicious attackers.
+
+### Non-repudiation
+
+The DID owner should generate cryptographic proof (signature) signed by a private key 
+paired with the public key in the blockchain by which non-repudiation is satisfied.
+
+
+## 4. Privacy Considerations
+
+_This section is non-normative._
+
+### Personal Data
+
+No personally identifiable information (PII) is included in a DID document retrieved by Infra DID resolver.
+DID Document details published on the blockchain ledger that are necessary only for authentication by other parties.
+Private keys are stored in a secure storage on local user devices owned and controlled by clients.
+Users can control any number of DIDs and may choose to store related data (e.g. verifiable credentials) locally or create encrypted online backups enabling self-sovereign identities.
+
+### DID Correlation Risks
+
+If DID Controllers want to mitigate the risk of correlation, they should use unique DIDs with unique private keys for every interaction.
+Infra DID provides `Pub-Key DID` method to create any number of DIDs without blockchain transaction cost for DIDs having only one private key. 
+
+
 ## Reference Implementations
 
 The code at [infra-did-resolver[4]](<https://github.com/InfraBlockchain/infra-did-resolver>) and
