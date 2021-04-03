@@ -307,7 +307,7 @@ Users can control any number of DIDs and may choose to store related data (e.g. 
 ### DID Correlation Risks
 
 If DID Controllers want to mitigate the risk of correlation, they should use unique DIDs with unique private keys for every interaction.
-Infra DID provides `Pub-Key DID` method to create any number of DIDs without blockchain transaction cost for DIDs having only one private key. 
+Infra DID provides `Pub-Key DID` method to create any number of DIDs without blockchain transaction cost for DIDs having only one public key. 
 
 
 ## Reference Implementations
