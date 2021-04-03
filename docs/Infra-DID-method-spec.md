@@ -281,8 +281,7 @@ The DID Document may be updated by invoking the relevant smart contract actions 
 
 Every Infra DID blockchain transaction on _Infra DID Registry contract_ to update a DID document is required to create a `signature` 
 for user action data concatenated with `blockchain id` and monotonically increasing `nonce` value. 
-A DID-document-modifying transaction executed on a DID registry contract of a specific blockchain network  
-cannot be replayed on any known Infra DID Registry of Infra DID compatible blockchain networks by malicious attackers.
+A DID-document-modifying transaction executed on a DID registry contract of a specific blockchain network cannot be replayed on any known Infra DID Registry of Infra DID compatible blockchain networks by malicious attackers.
 
 ### Non-repudiation
 
