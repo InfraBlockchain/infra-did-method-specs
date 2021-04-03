@@ -277,8 +277,6 @@ The DID Document may be updated by invoking the relevant smart contract actions 
 
 ## 3. Security Considerations
 
-_This section is non-normative._
-
 ### Replay Attack
 
 Every Infra DID blockchain transaction on _Infra DID Registry contract_ to update a DID document is required to create a `signature` 
@@ -291,10 +289,14 @@ cannot be replayed on any known Infra DID Registry of Infra DID compatible block
 The DID owner should generate cryptographic proof (signature) signed by a private key 
 paired with the public key in the blockchain by which non-repudiation is satisfied.
 
+### Denial of Serivice
+
+Infra DID method is implemented as smart contract on a InfraBlockchain(EOSIO-based) network. 
+Any party can replicate blockchain data and send transactions for Infra DID management, hence
+if one blockchain api node is attacked, any other valid blockchain node can provide Infra DID services.
+
 
 ## 4. Privacy Considerations
-
-_This section is non-normative._
 
 ### Personal Data
 
