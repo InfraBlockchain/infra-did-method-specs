@@ -79,7 +79,7 @@ Infra DID uses EOSIO-compatible public key string format encoding public key and
 key type          | public key string format
 ------------------|-----------------------------------------------------------------
 secp256k1         | "PUB_K1_" + BASE58( {33bytes_public_key_binary} + first_4_bytes( RIPEMD160("PUB_K1_"+{33bytes_public_key_binary}) ) )
-secp256r1 (P-256) | "PUB_R1_" + BASE58( {33bytes_public_key_binary} + first_4_bytes( RIPEMD160("PUB_K1_"+{33bytes_public_key_binary}) ) )
+secp256r1 (P-256) | "PUB_R1_" + BASE58( {33bytes_public_key_binary} + first_4_bytes( RIPEMD160("PUB_R1_"+{33bytes_public_key_binary}) ) )
 
 
 #### 1.2.3 Blockchain-Account-based DID (`Account DID`)
