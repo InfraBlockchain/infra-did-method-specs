@@ -4,7 +4,7 @@
 without cryptocurrency for the public sectors and enterprises. 
 Infra DID method is designed for the underlying InfraBlockchain network to be use as DID    
 The Infra DID method specification conforms to the requirements specified in
-the [DID specification[2]](https://w3c-ccg.github.io/did-core/), currently published by the
+the [DID specification[2]](https://www.w3.org/TR/did-core/), currently published by the
 W3C Credentials Community Group.
 
 ## 1. Infra DID
@@ -320,7 +320,7 @@ is intended to present a reference implementation of this DID method.
 
 **[1]** <https://infrablockchain.com>
 
-**[2]** <https://w3c-ccg.github.io/did-core/>
+**[2]** <https://www.w3.org/TR/did-core/>
 
 **[3]** <https://github.com/InfraBlockchain/infra-did-registry>
 
