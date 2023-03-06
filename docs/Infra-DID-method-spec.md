@@ -20,7 +20,7 @@ MUST be in lowercase. The remainder of the DID, after the prefix, is specified b
 ### 1.2 Infra DID Method Specific Identifier
 
 The Infra DID method specific identifiers are categorized as two DID types, 
-public-key-based DID (`PubKey DID`) and blockchain-account-based DID (`Account DID`) and ss58-encoded-address-based DID(`Address DID`).   
+public-key-based DID (`PubKey DID`) and blockchain-account-based DID (`Account DID`) and ss58-encoded-address-based DID(`SS58 Key DID`).   
 
 ```
 infra-did = "did:infra:" + infra-did-specific-idstring
@@ -37,7 +37,7 @@ ss58-encoded-address = substrate-address
 | did:infra:test01:PUB_K1_7nxEa8qHEiy34d...h8n5ikapZZrzjx   | PubKey DID  | a `did` whose info can be checked from `test01` blockchain network, network-specific id is base58-encoded secp256k1 public key    
 | did:infra:sentinel:PUB_R1_4vSVS9mQbiKu...bw8Mti7mc2F5     | PubKey DID  | a `did` on `sentinel` network, id is secp256r1(p256) public-key
 | did:infra:kornet:hu23nfowuehx                             | Account DID | a `did` representing blockchain account `hu23nfowuehx` on `kornet` blockchain network 
-| did:infra:space:5DfhGyQdFobKM8Ns...B6E1EqRzV              | Address DID | a `did` representing substrate address `5DfhGyQdFobKM8Ns...B6E1EqRzV` on `space` network 
+| did:infra:space:5DfhGyQdFobKM8Ns...B6E1EqRzV              | SS58 Key DID | a `did` representing substrate address `5DfhGyQdFobKM8Ns...B6E1EqRzV` on `space` network 
 
 
 #### 1.2.1 Network-ID
@@ -92,14 +92,14 @@ InfraBlockchain (EOSIO-based) provides account system which has built-in key man
 A blockchain account created on blockchain can be used a DID, account's `active` key registered on blockchain is used as controller key for the DID. 
 DID related information(e.g. service endpoints) can be retrieved from the DID registry contract.
 
-#### 1.2.4 SS58-Encoded-Address-based DID (`Address DID`)
+#### 1.2.4 SS58-Encoded-Address-based DID (`SS58 Key DID`)
 
 the default InfraBlockSpace (Substrate-based) address format is SS58. 
 The SS58 encoded address format is based on the Bitcoin Base-58-check format, but with a few modification specifically designed to suite Substrate-based chains.
 
 The SS58 address format itself is a encoded string of public key with sr25519(ed25519) elliptic curves, so owner of DID can control without registration on chain. However, if you want to modify the information about the DID(e.g. controllers, verification methods, service endpoints), you can do so by registering it on chain.
 
-* `Address DID` format
+* `SS58 Key DID` format
 
 key type          | public key string format
 ------------------|-----------------------------------------------------------------
@@ -153,7 +153,7 @@ sr25519           | BASE58( concat ( address-type, address, checksum ))
 }
 ```
 
-* `Address-DID` DID Doc example
+* `SS58 Key-DID` DID Doc example
 ```json
 {
   "@context": "https://www.w3.org/ns/did/v1",
@@ -178,8 +178,8 @@ sr25519           | BASE58( concat ( address-type, address, checksum ))
 Infra DID with `Pub-Key DID` and `Account-DID` is registered and managed on a dedicated DID Registry smart contract on a specific InfraBlockchain network.
 The owner of a Infra DID can manage Infra DID document by executing blockchain transactions on the DID Registry contract.
 
-Infra DID with `Address DID` is registered and managed on a dedicated DID pallet on a InfraBlockSpace network
-address based DID also can manage Infra DID document by executing blockchain extrinsics on DID pallet.
+Infra DID with `SS58 Key DID` is registered and managed on a dedicated DID pallet on a InfraBlockSpace network
+SS58 Key based DID also can manage Infra DID document by executing blockchain extrinsics on DID pallet.
 
 Anyone can read (resolve) the DID documents by accessing public InfraBlockchain(InfraBlockSpace) network nodes.
 
@@ -248,21 +248,21 @@ cleos create account accountsvc23 bcaccount234 PUB_K1_6kyc4xQizQmewF7J1wmmKkNooz
 }
 ```
 
-##### `Address-DID`
+##### `SS58 Key-DID`
 
-For creating `Address-DID` consisting of DID and one controller key created on a client side, no blockchain extrinsic is needed.
+For creating `SS58 Key-DID` consisting of DID and one controller key created on a client side, no blockchain extrinsic is needed.
 Blockchain extrinsics are required only when additional information for a DID is required to set, 
 e.g. setting revocation status, service endpoints, additional keys.    
-All basic `Address-DID`s with one controller key encoded on the DID itself are regarded as valid/active DIDs 
+All basic `SS58 Key-DID`s with one controller key encoded on the DID itself are regarded as valid/active DIDs 
 before a DID is explicitly revoked on blockchain.   
 
 ```javascript
 import InfraDID from 'infra-did-js';
 const networkId = 'space';
-const addressDID = InfraDID.createAddressDIDsr25519(networkId);
-console.log({addressDID});
+const ss58KeyDID = InfraDID.createSS58keyDIDsr25519(networkId);
+console.log({ss58KeyDID});
 /*
-      addressDID: {
+      ss58KeyDID: {
         did: 'did:infra:space:5CHucvTwrPg8L2tjneVoemApqXcUaEdUDsCEPyE7aDwrtR8D',
         publicKey: '0x0a11c9bcc81f8bd314e80bc51cbfacf30eaeb57e863196a79cccdc8bf4750d21',
         privateKey: '0xa2b0200f9666b743402289ca4f7e79c9a4a52ce129365578521b0b75396bd242'
@@ -293,7 +293,7 @@ console.log({addressDID});
    DID registry smart contract on the selected InfraBlockchain network
 5. extract service endpoint list from DID attributes map(*attr* field of *accdidattr* table)
 
-##### `Address-DID`
+##### `SS58 Key-DID`
 
 1. extract network id from *infra-did-specific-idstring* and select a corresponding blockchain rpc api node address
 2. use id string as blockchain address
@@ -312,7 +312,7 @@ const infraDidResolver = getResolver(config)
 const didResolver = new Resolver({ ...infraDidResolver })
 const pubkeyDID: DIDResolutionResult = await didResolver.resolve("did:infra:sentinel:PUB_K1_7nxEa8qHEiy34dpuYH4yE2zRWaAoeT1gsdTnh8n5ikapZZrzjx")
 const accountDID: DIDResolutionResult = await didResolver.resolve("did:infra:sentinel:bcaccountaaa")
-const addressDID: DIDResolutionResult = await didResolver.resolve("did:infra:space:5CHucvTwrPg8L2tjneVoemApqXcUaEdUDsCEPyE7aDwrtR8D")
+const ss58KeyDID: DIDResolutionResult = await didResolver.resolve("did:infra:space:5CHucvTwrPg8L2tjneVoemApqXcUaEdUDsCEPyE7aDwrtR8D")
 ```
 
 #### 2.2.3 Update
@@ -333,7 +333,7 @@ The DID Document may be updated by invoking the relevant smart contract actions 
 * update Account DID attributes (currently service endpoint update is supported)
   - contract action : **accsetattr**(name& account, string& key, string& value)
 
-##### `Address DID`
+##### `SS58 Key DID`
 
 * add controller 
   - extrinsic : api.tx.didModule.addControllers(controllers, sig)
@@ -367,7 +367,7 @@ The DID Document may be updated by invoking the relevant smart contract actions 
   - contract action : **pkdidrevoke**(public_key& pk, signature& sig, name& ram_payer)
   - *nonce* value of public-key DID attribute is set as 65535(max 16bit integer value)
 
-##### `Address DID`
+##### `SS58 Key DID`
 
 * remove onchain DID 
   - extrinsic : api.tx.didModule.remoteOnChainDid(removal, sig)
